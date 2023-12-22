@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import React, {useState, useEffect} from "react";
+import axios from 'axios';
 
 function App() {
     const [msg, setMsg] = useState([]);
@@ -9,6 +10,7 @@ function App() {
         fetch("/api/hello")
             .then((res) => {return res.json();})
             .then((data) => {setMsg(data);})
+
       }, []);
       return (
         <div className="App">
