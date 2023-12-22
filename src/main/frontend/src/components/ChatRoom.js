@@ -6,7 +6,7 @@ var stompClient =null;
 const ChatRoom = () => {
     const [privateChats, setPrivateChats] = useState(new Map());
     const [publicChats, setPublicChats] = useState([]);
-    const [tab,setTab] =useState("CHATROOM");
+    const [tab,setTab] = useState("CHATROOM");
     const [userData, setUserData] = useState({
         username: '',
         receivername: '',
@@ -33,6 +33,7 @@ const ChatRoom = () => {
     const userJoin=()=>{
           var chatMessage = {
             senderName: userData.username,
+            message: userData.message + "님이 입장 하셨습니다.",
             status:"JOIN"
           };
           stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
@@ -44,6 +45,22 @@ const ChatRoom = () => {
             case "JOIN":
                 if(!privateChats.get(payloadData.senderName)){
                     privateChats.set(payloadData.senderName,[]);
+                    setPrivateChats(new Map(privateChats));
+                }
+
+                // 입장 메세지
+                publicChats.push(payloadData);
+                setPublicChats([...publicChats]);
+
+                // 사설 창 생성
+                var payloadData = JSON.parse(payload.body);
+                if(privateChats.get(payloadData.senderName)){
+                    privateChats.get(payloadData.senderName).push(payloadData);
+                    setPrivateChats(new Map(privateChats));
+                }else{
+                    let list =[];
+                    list.push(payloadData);
+                    privateChats.set(payloadData.senderName,list);
                     setPrivateChats(new Map(privateChats));
                 }
                 break;
@@ -116,15 +133,18 @@ const ChatRoom = () => {
     const registerUser=()=>{
         connect();
     }
+
     return (
     <div className="container">
         {userData.connected?
         <div className="chat-box">
             <div className="member-list">
                 <ul>
-                    <li onClick={()=>{setTab("CHATROOM")}} className={`member ${tab==="CHATROOM" && "active"}`}>Chatroom</li>
-                    {[...privateChats.keys()].map((name,index)=>(
-                        <li onClick={()=>{setTab(name)}} className={`member ${tab===name && "active"}`} key={index}>{name}</li>
+                    <li onClick={() => { setTab("CHATROOM") }} className={`member ${tab === "CHATROOM" && "active"}`}>Chatroom</li>
+                    {[...privateChats.keys()].map((name, index) => (
+                        name !== userData.username && (
+                            <li onClick={() => { setTab(name) }} className={`member ${tab === name && "active"}`} key={index}>{name}</li>
+                        )
                     ))}
                 </ul>
             </div>
@@ -133,8 +153,8 @@ const ChatRoom = () => {
                     {publicChats.map((chat,index)=>(
                         <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
                             {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
-                            <div className="message-data">{chat.message}</div>
                             {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+                            <div className="message-data">{chat.message}</div>
                         </li>
                     ))}
                 </ul>
@@ -149,8 +169,8 @@ const ChatRoom = () => {
                     {[...privateChats.get(tab)].map((chat,index)=>(
                         <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
                             {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
-                            <div className="message-data">{chat.message}</div>
                             {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+                            <div className="message-data">{chat.message}</div>
                         </li>
                     ))}
                 </ul>
