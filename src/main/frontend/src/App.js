@@ -1,44 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import ChatRoom from './components/ChatRoom'
 
-import React, {useState, useEffect} from "react";
-import axios from 'axios';
-
-function App() {
-    const [msg, setMsg] = useState([]);
-      useEffect(() => {
-        fetch("/api/hello")
-            .then((res) => {return res.json();})
-            .then((data) => {setMsg(data);})
-
-      }, []);
-      return (
-        <div className="App">
-          <header className="App-header">
-            <ul>
-              {msg.map((content, idx) => <li key={`${idx} - ${content}`}>{content}</li>)}
-            </ul>
-          </header>
-        </div>
-      );
-//  return (
-//    <div className="App">
-//      <header className="App-header">
-//        <img src={logo} className="App-logo" alt="logo" />
-//        <p>
-//          Edit <code>src/App.js</code> and save to reload.
-//        </p>
-//        <a
-//          className="App-link"
-//          href="https://reactjs.org"
-//          target="_blank"
-//          rel="noopener noreferrer"
-//        >
-//          Learn React
-//        </a>
-//      </header>
-//    </div>
-//  );
+const App = () => {
+  return (
+    <ChatRoom />
+  )
 }
 
 export default App;
