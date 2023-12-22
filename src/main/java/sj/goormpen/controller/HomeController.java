@@ -22,10 +22,10 @@ public class HomeController {
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public Message receiveMessage(@Payload Message message){
-        if (message.getStatus() == Status.JOIN) {
-            userRepository.addUser(message.getSenderName());
-            System.out.println("현재 유저 수 : " + userRepository.getUsers().toString());
-        }
+//        if (message.getStatus() == Status.JOIN) {
+//            userRepository.addUser(message.getSenderName());
+//            System.out.println("현재 유저 수 : " + userRepository.getUsers().toString());
+//        }
 
         System.out.println(message.toString());
         return message;
