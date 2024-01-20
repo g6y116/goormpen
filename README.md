@@ -1,14 +1,11 @@
-# Goormpen
+# Goormpen - 실시간 채팅 개인 프로젝트
 
-## 서비스 링크
-
-[Goormpen](http://ec2-15-165-114-166.ap-northeast-2.compute.amazonaws.com/)
 
 ## 소개
 - 리액트와 스프링을 연동해 배포하였습니다.
 - 웹소켓을 이용한 실시간 채팅 서비스입니다.
 
-## 프로젝트 정보
+## 스택
 
 - React, sockjs-client, stompjs
 - Spring boot, Websocket
@@ -17,7 +14,7 @@
 ## 기능
 
 - 전체 채팅 방
-- DM
+- 1대1 메세지 방
 
 ## 스크린 샷
 
